@@ -4,45 +4,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .file-tree {
+            list-style: none;
+            padding-left: 20px;
+        }
+        .file-tree li {
+            margin: 5px 0;
+        }
+        .directory {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .file {
+            cursor: default;
+            color: #555;
+        }
+        .hidden {
+            display: none;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>File Viewer</h1>
-    <p>Click on a file to view or download it.</p>
-    <div id="file-viewer"></div>
-    <footer>
-        <p>Licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
-    </footer>
+    <div class="controls">
+        <label for="view-style">Choose file view style:</label>
+        <select id="view-style">
+            <option value="default">Default</option>
+            <option value="compact">Compact</option>
+            <option value="expanded">Expanded</option>
+        </select>
+    </div>
+
+    <ul class="file-tree" id="file-tree"></ul>
+
     <script>
-        async function loadFiles() {
-            const response = await fetch('files.json');
-            const data = await response.json();
-            const fileViewer = document.getElementById('file-viewer');
+        const fileData = {
+            "files": [
+                {
+                    "name": "src",
+                    "type": "directory",
+                    "path": "src",
+                    "children": [
+                        {
+                            "name": "index.html",
+                            "type": "file",
+                            "path": "src/index.html"
+                        },
+                        {
+                            "name": "styles.css",
+                            "type": "file",
+                            "path": "src/styles.css"
+                        }
+                    ]
+                },
+                {
+                    "name": "README.md",
+                    "type": "file",
+                    "path": "README.md"
+                },
+                {
+                    "name": "docs",
+                    "type": "directory",
+                    "path": "docs",
+                    "children": [
+                        {
+                            "name": "files.json",
+                            "type": "file",
+                            "path": "docs/files.json"
+                        }
+                    ]
+                }
+            ]
+        };
 
-            function renderFiles(files, container) {
-                const ul = document.createElement('ul');
-                files.forEach(file => {
-                    const li = document.createElement('li');
-                    if (file.type === 'directory') {
-                        li.textContent = file.name;
-                        const nested = document.createElement('div');
-                        renderFiles(file.children, nested);
-                        li.appendChild(nested);
-                    } else {
-                        const link = document.createElement('a');
-                        link.textContent = file.name;
-                        link.href = file.path;
-                        link.target = "_blank";
-                        li.appendChild(link);
-                    }
-                    ul.appendChild(li);
-                });
-                container.appendChild(ul);
-            }
+        function renderTree(data, parentElement) {
+            data.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item.name;
 
-            renderFiles(data.files, fileViewer);
-        }
-
-        loadFiles();
-    </script>
-</body>
-</html>
+                if (item.type === "directory") {
+                    li.classList.add("directory");
+                    const ul = document.createElement("ul");
+                    ul.classList.add("file-tree", "hidden");
+                    li.addEventListener("click", function () {
+                        ul.classList.toggle("hidden");
+                    });
+                    parentElement
