@@ -22,15 +22,11 @@ jobs:
       with:
         python-version: '3.9'
 
-    # Step 3: 安装依赖（如果需要）
-    - name: Install dependencies
-      run: pip install --upgrade pip
-
-    # Step 4: 运行 Python 脚本生成 files.json
+    # Step 3: 运行 Python 脚本生成 files.json
     - name: Generate files.json
       run: python docs/generate_json.py
 
-    # Step 5: 提交并推送更新的 files.json
+    # Step 4: 提交并推送更新的 files.json
     - name: Commit and push changes
       env:
         PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
@@ -39,9 +35,9 @@ jobs:
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git add docs/files.json
         git commit -m "Update files.json via GitHub Actions"
-        git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/<your-username>/<your-repo>.git HEAD:main
+        git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/Qianban2027/Study.git HEAD:main
 
-    # Step 6: 部署到 GitHub Pages
+    # Step 5: 部署到 GitHub Pages
     - name: Deploy GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
