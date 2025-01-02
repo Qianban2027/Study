@@ -1,10 +1,5 @@
 [
   {
-    "name": "git_sync.sh",
-    "type": "file",
-    "path": "git_sync.sh"
-  },
-  {
     "name": "历史",
     "type": "directory",
     "path": "历史",
@@ -2021,21 +2016,6 @@
     ]
   },
   {
-    "name": "LICENSE",
-    "type": "file",
-    "path": "LICENSE"
-  },
-  {
-    "name": ".gitignore",
-    "type": "file",
-    "path": ".gitignore"
-  },
-  {
-    "name": "git_sync.bat",
-    "type": "file",
-    "path": "git_sync.bat"
-  },
-  {
     "name": "地理",
     "type": "directory",
     "path": "地理",
@@ -2063,11 +2043,6 @@
         "path": "政治/哲学校本答案.pptx"
       }
     ]
-  },
-  {
-    "name": "readme.md",
-    "type": "file",
-    "path": "readme.md"
   },
   {
     "name": "语文",
