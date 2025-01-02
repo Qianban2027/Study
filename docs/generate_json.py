@@ -5,8 +5,8 @@ def generate_file_tree(base_path, relative_path=""):
     items = []
     full_path = os.path.join(base_path, relative_path)
     for item in sorted(os.listdir(full_path)):
-        # 跳过指定文件和目录
-        if item in ["git_sync.sh", "git_sync.bat", "LICENSE", "docs", ".git", ".github"]:
+        # 跳过指定文件和文件夹
+        if item in [".git", ".github", "docs", "git_sync.sh", "git_sync.bat", "LICENSE"]:
             continue
         item_path = os.path.join(full_path, item)
         if os.path.isdir(item_path):
@@ -30,5 +30,6 @@ if __name__ == "__main__":
     base_path = "."  # 根目录
     file_tree = generate_file_tree(base_path)
     with open("docs/files.json", "w", encoding="utf-8") as f:
-        json.dump({"files": file_tree}, f, indent=4)
-    print("JSON file generated at docs/files.json")
+        # 使用 ensure_ascii=False 保存中文字符
+        json.dump({"files": file_tree}, f, indent=4, ensure_ascii=False)
+    print("JSON 文件已生成：docs/files.json")
