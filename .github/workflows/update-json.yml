@@ -11,33 +11,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 检出仓库
+      # 1. 检出仓库
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 设置 Python 环境
+      # 2. 设置 Python 环境
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
-      # 运行 Python 脚本生成 files.json
+      # 3. 运行 Python 脚本生成 files.json
       - name: Run Python script to generate files.json
         run: |
           python docs/generate_json.py
           echo "JSON 文件已生成: docs/files.json"
 
-      # 禁用 Jekyll
+      # 4. 禁用 Jekyll（用于 GitHub Pages）
       - name: Create .nojekyll file
         run: touch docs/.nojekyll
 
-      # 配置 Git 用户
+      # 5. 配置 Git 用户
       - name: Configure git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      # 强制覆盖推送到远程分支
+      # 6. 强制推送到 main 分支
       - name: Force push changes
         run: |
           git add docs/files.json docs/.nojekyll
