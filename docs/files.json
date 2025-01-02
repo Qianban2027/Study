@@ -192,19 +192,19 @@
                             "path": ".git/objects/pack",
                             "children": [
                                 {
-                                    "name": "pack-71c2141a62f6bd6576227ea82281145b047e3414.idx",
+                                    "name": "pack-05ced3654ce5441d05f20cdc0a99f80570a7b801.idx",
                                     "type": "file",
-                                    "path": ".git/objects/pack/pack-71c2141a62f6bd6576227ea82281145b047e3414.idx"
+                                    "path": ".git/objects/pack/pack-05ced3654ce5441d05f20cdc0a99f80570a7b801.idx"
                                 },
                                 {
-                                    "name": "pack-71c2141a62f6bd6576227ea82281145b047e3414.pack",
+                                    "name": "pack-05ced3654ce5441d05f20cdc0a99f80570a7b801.pack",
                                     "type": "file",
-                                    "path": ".git/objects/pack/pack-71c2141a62f6bd6576227ea82281145b047e3414.pack"
+                                    "path": ".git/objects/pack/pack-05ced3654ce5441d05f20cdc0a99f80570a7b801.pack"
                                 },
                                 {
-                                    "name": "pack-71c2141a62f6bd6576227ea82281145b047e3414.rev",
+                                    "name": "pack-05ced3654ce5441d05f20cdc0a99f80570a7b801.rev",
                                     "type": "file",
-                                    "path": ".git/objects/pack/pack-71c2141a62f6bd6576227ea82281145b047e3414.rev"
+                                    "path": ".git/objects/pack/pack-05ced3654ce5441d05f20cdc0a99f80570a7b801.rev"
                                 }
                             ]
                         }
@@ -277,33 +277,6 @@
                             "path": ".github/workflows/update-json.yml"
                         }
                     ]
-                }
-            ]
-        },
-        {
-            "name": "docs",
-            "type": "directory",
-            "path": "docs",
-            "children": [
-                {
-                    "name": ".nojekyll",
-                    "type": "file",
-                    "path": "docs/.nojekyll"
-                },
-                {
-                    "name": "files.json",
-                    "type": "file",
-                    "path": "docs/files.json"
-                },
-                {
-                    "name": "generate_json.py",
-                    "type": "file",
-                    "path": "docs/generate_json.py"
-                },
-                {
-                    "name": "index.html",
-                    "type": "file",
-                    "path": "docs/index.html"
                 }
             ]
         },
