@@ -1,4 +1,4 @@
-name: Update files.json
+name: Generate and Push Files
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 检出代码仓库
+      # 检出仓库
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -21,43 +21,25 @@ jobs:
         with:
           python-version: 3.9
 
-      # 运行生成文件的 Python 脚本
+      # 运行 Python 脚本生成 files.json
       - name: Run Python script to generate files.json
         run: |
-          echo "Running Python script to generate files.json"
           python docs/generate_json.py
+          echo "JSON 文件已生成: docs/files.json"
 
-      # 创建 .nojekyll 文件
+      # 禁用 Jekyll
       - name: Create .nojekyll file
-        run: |
-          touch docs/.nojekyll
-          echo "Jekyll disabled by creating .nojekyll file"
+        run: touch docs/.nojekyll
 
-      # 配置 git 用户信息
+      # 配置 Git 用户
       - name: Configure git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      # 暂存所有更改以避免 pull 冲突
-      - name: Stash changes
-        run: |
-          git add -A
-          git commit -m "Temporary commit to stash changes" || echo "No changes to commit"
-
-      # 拉取远程分支以保持同步
-      - name: Fetch and merge remote changes
-        run: |
-          git pull origin main --rebase
-
-      # 应用之前的更改（如果有的话）
-      - name: Apply previous changes
-        run: |
-          git reset HEAD~ || echo "No temporary commit to reset"
-
-      # 检查并提交更改
-      - name: Commit and push changes if any
+      # 强制覆盖推送到远程分支
+      - name: Force push changes
         run: |
           git add docs/files.json docs/.nojekyll
-          git diff-index --quiet HEAD || git commit -m "Update files.json via GitHub Actions"
-          git push https://@github.com/${{ github.repository }} HEAD:main
+          git commit -m "Update files.json via GitHub Actions" || echo "No changes to commit"
+          git push origin main --force
