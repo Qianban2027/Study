@@ -1,6 +1,107 @@
-.vscode
-docs/
-!docs/file.json 
-!docs/index.html
-!docs/script.js
-!docs/style.css
+# 操作系统相关
+####################
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Node.js (如果你使用 Node.js)
+####################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE和编辑器相关
+####################
+# Visual Studio Code
+.vscode/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Emacs
+*~
+
+# Vim
+*.swp
+
+# JetBrains
+####################
+*.log
+*.idea/
+*.pyc
+__pycache__/
+
+# 其他临时文件
+####################
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 生成的文件
+####################
+dist/
+build/
+temp/
+tmp/
+*.out
+
+# 配置文件
+####################
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# GitHub Pages 构建输出（如果适用）
+####################
+# 如果你使用 GitHub Pages 并将 docs 目录作为发布源，可以忽略除必要文件外的其他文件
+# 取消下面的注释并根据需要调整
+docs/*
+!docs/files.json
+
+# 学习资料目录下的忽略规则（可选）
+####################
+# 如果你不希望某些类型的文件被跟踪，可以在此添加规则
+# 例如，忽略所有的临时文件和备份文件
+*.tmp
+*.bak
+*.swp
+
+# 图片缓存文件（可选）
+####################
+# 如果你有大量图片，可能需要忽略缓存或压缩文件
+# *.cache
+# *.compressed
+
+# 其他
+####################
+# 忽略所有以 ~ 结尾的备份文件
+*~
+
+# 忽略所有 .lock 文件
+*.lock
+
+# 忽略 .github 目录
+.github/
+
+# 忽略 readme.md 文件
+readme.md
