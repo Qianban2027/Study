@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>文件下载界面</title>
+
+  <!-- 引用外部CSS文件 -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>文件下载界面</h1>
+    <div id="file-tree"></div>
+  </div>
+
+  <script>
+    // Raw文件前缀，根据你自己的仓库名、分支名进行调整
+    const GITHUB_RAW_PREFIX = "https://raw.githubusercontent.com/Qianban2027/Study/main/";
+
+    // 读取 /docs/files.json 文件
+    fetch("files.json")
+      .then((response) => response.json())
+      .then((data) => {
+        const fileTreeContainer = document.getElementById("file-tree");
+        const ul = document.createElement("ul");
+
+        // 递归生成树
+        data.forEach(item => {
+          const li = createTreeItem(item);
+          ul.appendChild(li);
+        });
+        fileTreeContainer.appendChild(ul);
+
+        // 初始化所有文件夹的点击事件
+        addToggleClickEvent();
+      })
+      .catch((err) => {
+        console.error("加载 JSON 文件出现错误:", err);
+      });
+
+    // 创建树节点（文件夹/文件）
+    function createTreeItem(item) {
+      const li = document.createElement("li");
+      li.classList.add(item.type === "directory" ? "folder-item" : "file-item");
+
+      // 如果是文件夹
+      if (item.type === "directory") {
+        // 小图标（▶/▼）
+        const toggleSpan = document.createElement("span");
+        toggleSpan.className = "toggle-btn";
+        li.appendChild(toggleSpan);
+
+        // 文件夹名
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "folder-icon";
+        nameSpan.textContent = item.name;
+        li.appendChild(nameSpan);
+
+        // 递归子节点
+        if (item.children && item.children.length > 0) {
+          const subUl = document.createElement("ul");
+          subUl.className = "nested";
+          item.children.forEach(child => {
+            const childLi = createTreeItem(child);
+            subUl.appendChild(childLi);
+          });
+          li.appendChild(subUl);
+        }
+
+      } else {
+        // 如果是文件
+        const nameSpan = document.createElement("span");
+        nameSpan.className = "file-icon";
+        nameSpan.textContent = item.name;
+        li.appendChild(nameSpan);
+
+        // 添加下载链接
+        const link = document.createElement("a");
+        link.className = "download-link";
+        link.textContent = "[下载]";
+        // 这里使用原始文件地址: GITHUB_RAW_PREFIX + path
+        // 如果 item.path 以 / 开头，可去掉前导斜线
+        let pathWithoutSlash = item.path.replace(/^\/+/, '');
+        link.href = GITHUB_RAW_PREFIX + pathWithoutSlash;
+        // link.target = "_blank"; // 若希望在新窗口打开，则取消注释
+        li.appendChild(link);
+      }
+
+      return li;
+    }
+
+    // 给文件夹 li 添加点击事件，实现展开/折叠
+    function addToggleClickEvent() {
+      const folderItems = document.querySelectorAll("li.folder-item");
+      folderItems.forEach(folder => {
+        folder.addEventListener("click", function(e) {
+          // 如果点击的是A链接，则不做展开折叠
+          if (e.target.tagName.toLowerCase() === 'a') return;
+
+          // 切换open类
+          this.classList.toggle("open");
+          e.stopPropagation();
+        });
+      });
+    }
+  </script>
+</body>
+</html>
