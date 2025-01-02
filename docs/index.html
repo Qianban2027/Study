@@ -4,111 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File Viewer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        #header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-        }
-        #view-selector {
-            margin: 20px;
-            text-align: center;
-        }
-        .file-tree {
-            margin: 20px;
-        }
-        .file-item {
-            cursor: pointer;
-            margin-left: 20px;
-        }
-        .folder {
-            font-weight: bold;
-        }
-        .hidden {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="header">
-        <h1>File Viewer</h1>
-    </div>
-    <div id="view-selector">
-        <label for="view-style">Choose file view style: </label>
-        <select id="view-style">
-            <option value="default">Default</option>
-            <option value="compact">Compact</option>
-            <option value="expanded">Expanded</option>
-        </select>
-    </div>
-    <div class="file-tree" id="file-tree"></div>
-
-    <script>
-        const fileTreeContainer = document.getElementById("file-tree");
-        const viewSelector = document.getElementById("view-style");
-
-        // Fetch JSON data and render file tree
-        fetch('./docs/files.json')
-            .then(response => response.json())
-            .then(data => {
-                renderFileTree(data.files, fileTreeContainer);
-            })
-            .catch(error => console.error('Error loading file tree:', error));
-
-        function renderFileTree(data, parentElement) {
-            data.forEach(item => {
-                const itemElement = document.createElement('div');
-                itemElement.className = `file-item ${item.type}`;
-                itemElement.textContent = item.name;
-
-                if (item.type === "directory") {
-                    itemElement.classList.add("folder");
-                    const childrenContainer = document.createElement('div');
-                    childrenContainer.className = "hidden";
-                    parentElement.appendChild(itemElement);
-                    parentElement.appendChild(childrenContainer);
-
-                    // Toggle visibility on click
-                    itemElement.addEventListener('click', () => {
-                        childrenContainer.classList.toggle("hidden");
-                    });
-
-                    renderFileTree(item.children, childrenContainer);
-                } else {
-                    // Add click event for files (optional)
-                    itemElement.addEventListener('click', () => {
-                        alert(`Clicked on file: ${item.name}`);
-                    });
-                    parentElement.appendChild(itemElement);
-                }
-            });
-        }
-
-        // Handle view style change
-        viewSelector.addEventListener("change", () => {
-            const style = viewSelector.value;
-            if (style === "compact") {
-                document.querySelectorAll(".file-item").forEach(item => {
-                    item.style.marginLeft = "10px";
-                });
-            } else if (style === "expanded") {
-                document.querySelectorAll(".file-item").forEach(item => {
-                    item.style.marginLeft = "30px";
-                });
-            } else {
-                document.querySelectorAll(".file-item").forEach(item => {
-                    item.style.marginLeft = "20px";
-                });
-            }
-        });
-    </script>
+    <h1>File Viewer</h1>
+    <div id="loader">Loading...</div>
+    <div id="file-tree"></div>
+    <script src="script.js"></script>
 </body>
 </html>
