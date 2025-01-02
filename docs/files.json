@@ -192,19 +192,19 @@
                             "path": ".git/objects/pack",
                             "children": [
                                 {
-                                    "name": "pack-d225492cfcb07d7375a7d204ec62c74c6a58448e.idx",
+                                    "name": "pack-6d04ae79a3e4dc128c74b57f1164f5dc9ab53b52.idx",
                                     "type": "file",
-                                    "path": ".git/objects/pack/pack-d225492cfcb07d7375a7d204ec62c74c6a58448e.idx"
+                                    "path": ".git/objects/pack/pack-6d04ae79a3e4dc128c74b57f1164f5dc9ab53b52.idx"
                                 },
                                 {
-                                    "name": "pack-d225492cfcb07d7375a7d204ec62c74c6a58448e.pack",
+                                    "name": "pack-6d04ae79a3e4dc128c74b57f1164f5dc9ab53b52.pack",
                                     "type": "file",
-                                    "path": ".git/objects/pack/pack-d225492cfcb07d7375a7d204ec62c74c6a58448e.pack"
+                                    "path": ".git/objects/pack/pack-6d04ae79a3e4dc128c74b57f1164f5dc9ab53b52.pack"
                                 },
                                 {
-                                    "name": "pack-d225492cfcb07d7375a7d204ec62c74c6a58448e.rev",
+                                    "name": "pack-6d04ae79a3e4dc128c74b57f1164f5dc9ab53b52.rev",
                                     "type": "file",
-                                    "path": ".git/objects/pack/pack-d225492cfcb07d7375a7d204ec62c74c6a58448e.rev"
+                                    "path": ".git/objects/pack/pack-6d04ae79a3e4dc128c74b57f1164f5dc9ab53b52.rev"
                                 }
                             ]
                         }
