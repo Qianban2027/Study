@@ -2,21 +2,21 @@
   {
     "name": "index.html",
     "type": "file",
-    "path": "./index.html"
+    "path": "index.html"
   },
   {
     "name": "files.json",
     "type": "file",
-    "path": "./files.json"
+    "path": "files.json"
   },
   {
     "name": ".nojekyll",
     "type": "file",
-    "path": "./.nojekyll"
+    "path": ".nojekyll"
   },
   {
     "name": "generate_json.py",
     "type": "file",
-    "path": "./generate_json.py"
+    "path": "generate_json.py"
   }
 ]
