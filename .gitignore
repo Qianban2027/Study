@@ -1,1 +1,6 @@
 .vscode
+docs/
+!docs/file.json 
+!docs/index.html
+!docs/script.js
+!docs/style.css
