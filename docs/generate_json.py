@@ -1,45 +1,39 @@
 import os
 import json
 
-# 定义忽略的文件和目录
-IGNORE_FILES = ["git_sync.sh", "git_sync.bat", "LICENSE"]
-IGNORE_DIRS = [".git", ".github"]
-
-def generate_file_structure(base_path, relative_path=""):
-    file_list = []
+def generate_file_tree(base_path, relative_path=""):
+    items = []
     full_path = os.path.join(base_path, relative_path)
-    
-    for item in os.listdir(full_path):
-        # 跳过忽略的文件和目录
-        if item in IGNORE_FILES or item in IGNORE_DIRS:
+    for item in sorted(os.listdir(full_path)):
+        # 跳过指定文件
+        if item in ["git_sync.sh", "git_sync.bat", "LICENSE"]:
             continue
-        
         item_path = os.path.join(full_path, item)
-        relative_item_path = os.path.join(relative_path, item)
-        
-        if os.path.isdir(item_path):  # 如果是目录
-            file_list.append({
+        if os.path.isdir(item_path):
+            # 如果是目录，递归生成
+            items.append({
                 "name": item,
                 "type": "directory",
-                "path": relative_item_path,
-                "children": generate_file_structure(base_path, relative_item_path)
+                "path": os.path.join(relative_path, item).replace("\\", "/"),
+                "children": generate_file_tree(base_path, os.path.join(relative_path, item))
             })
-        else:  # 如果是文件
-            file_list.append({
+        else:
+            # 如果是文件，直接添加
+            items.append({
                 "name": item,
                 "type": "file",
-                "path": relative_item_path
+                "path": os.path.join(relative_path, item).replace("\\", "/")
             })
-    
-    return file_list
+    return items
 
-# 生成文件结构
-base_directory = "docs"
-file_structure = generate_file_structure(base_directory)
+if __name__ == "__main__":
+    base_path = "."  # 根目录
+    # 确保 docs 目录存在
+    if not os.path.exists("docs"):
+        os.makedirs("docs")
 
-# 保存为 JSON 文件
-output_file = os.path.join(base_directory, "files.json")
-with open(output_file, "w", encoding="utf-8") as f:
-    json.dump(file_structure, f, indent=2, ensure_ascii=False)
-
-print(f"JSON 文件已生成：{output_file}")
+    file_tree = generate_file_tree(base_path)
+    # 写入 JSON 文件
+    with open("docs/files.json", "w", encoding="utf-8") as f:
+        json.dump({"files": file_tree}, f, indent=4, ensure_ascii=False)
+    print("JSON file generated at docs/files.json")
