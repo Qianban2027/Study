@@ -39,6 +39,11 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      # 拉取远程分支以保持同步
+      - name: Fetch and merge remote changes
+        run: |
+          git pull origin main --rebase
+
       # 检查并提交更改
       - name: Commit and push changes if any
         run: |
