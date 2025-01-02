@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # 手动触发工作流
+  workflow_dispatch:
 
 jobs:
   build:
@@ -39,10 +39,21 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
+      # 暂存所有更改以避免 pull 冲突
+      - name: Stash changes
+        run: |
+          git add -A
+          git commit -m "Temporary commit to stash changes" || echo "No changes to commit"
+
       # 拉取远程分支以保持同步
       - name: Fetch and merge remote changes
         run: |
           git pull origin main --rebase
+
+      # 应用之前的更改（如果有的话）
+      - name: Apply previous changes
+        run: |
+          git reset HEAD~ || echo "No temporary commit to reset"
 
       # 检查并提交更改
       - name: Commit and push changes if any
