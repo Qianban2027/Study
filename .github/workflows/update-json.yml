@@ -3,9 +3,10 @@ name: Update files.json and Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # 每次 push 到 main 分支触发
+      - main  # 每次推送到 main 分支触发
   schedule:
     - cron: '0 */4 * * *'  # 每 4 小时触发一次
+  workflow_dispatch:  # 手动触发工作流
 
 jobs:
   build:
@@ -24,20 +25,35 @@ jobs:
 
     # Step 3: 运行 Python 脚本生成 files.json
     - name: Generate files.json
-      run: python docs/generate_json.py
+      run: |
+        echo "Running Python script to generate files.json"
+        python docs/generate_json.py
 
-    # Step 4: 提交并推送更新的 files.json
+    # Step 4: 调试信息
+    - name: Debug Environment
+      run: |
+        echo "GITHUB_REF=${GITHUB_REF}"
+        echo "GITHUB_SHA=${GITHUB_SHA}"
+        echo "WORKING_DIRECTORY=${PWD}"
+
+    # Step 5: 禁用 Jekyll
+    - name: Disable Jekyll
+      run: |
+        touch docs/.nojekyll
+        echo "Jekyll disabled by creating .nojekyll file"
+
+    # Step 6: 提交并推送更新的 files.json
     - name: Commit and push changes
       env:
         PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add docs/files.json
+        git add docs/files.json docs/.nojekyll
         git commit -m "Update files.json via GitHub Actions"
         git push https://${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/Qianban2027/Study.git HEAD:main
 
-    # Step 5: 部署到 GitHub Pages
+    # Step 7: 部署到 GitHub Pages
     - name: Deploy GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
