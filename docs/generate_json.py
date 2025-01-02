@@ -1,23 +1,29 @@
 import os
 import json
 
-def generate_files_json(output_file="docs/files.json"):
-    # 遍历所有文件和目录
-    files_data = []
-    for root, dirs, files in os.walk("."):
-        for file in files:
-            file_path = os.path.relpath(os.path.join(root, file), ".")
-            files_data.append({
-                "name": file,
-                "type": "file",
-                "path": file_path
+def build_file_tree(base_path, rel_path=""):
+    file_tree = []
+    full_path = os.path.join(base_path, rel_path)
+    for entry in os.listdir(full_path):
+        entry_path = os.path.join(full_path, entry)
+        if os.path.isfile(entry_path):
+            file_tree.append({"name": entry, "type": "file", "path": os.path.join(rel_path, entry)})
+        elif os.path.isdir(entry_path):
+            file_tree.append({
+                "name": entry,
+                "type": "directory",
+                "path": os.path.join(rel_path, entry),
+                "children": build_file_tree(base_path, os.path.join(rel_path, entry))
             })
+    return file_tree
 
-    # 将文件信息写入 JSON 文件（格式化为多行）
-    with open(output_file, "w") as json_file:
-        json.dump(files_data, json_file, indent=4)
-
-    print(f"{output_file} updated successfully.")
+def main():
+    base_path = "."  # 根目录
+    file_tree = build_file_tree(base_path)
+    output_path = "docs/files.json"
+    with open(output_path, "w", encoding="utf-8") as f:
+        json.dump(file_tree, f, ensure_ascii=False, indent=4)
+    print(f"JSON 文件已生成: {output_path}")
 
 if __name__ == "__main__":
-    generate_files_json()
+    main()
