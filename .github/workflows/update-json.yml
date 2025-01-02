@@ -1,0 +1,40 @@
+name: Update files.json and Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 每次 push 到 main 分支触发
+  schedule:
+    - cron: '0 */4 * * *'  # 每 4 小时触发一次
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Generate files.json
+      run: python docs/generate_json.py
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add docs/files.json
+        git commit -m "Update files.json via GitHub Actions"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Deploy GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
