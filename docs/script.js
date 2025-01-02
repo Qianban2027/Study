@@ -5,12 +5,14 @@ const GITHUB_RAW_PREFIX = "https://raw.githubusercontent.com/Qianban2027/Study/m
 
 // 全局变量保存原始数据
 let originalData = [];
+let currentData = [];
 
 // 读取 /docs/files.json 文件
 fetch("files.json")
   .then((response) => response.json())
   .then((data) => {
     originalData = data; // 保存原始数据
+    currentData = data; // 初始化当前显示数据
     renderFileTree(data);
   })
   .catch((err) => {
@@ -21,13 +23,51 @@ fetch("files.json")
 // 监听搜索框输入
 document.getElementById("searchInput").addEventListener("input", function() {
   const query = this.value.trim().toLowerCase();
-  if (query === "") {
-    renderFileTree(originalData);
-  } else {
-    const filteredData = filterTree(originalData, query);
-    renderFileTree(filteredData);
-  }
+  applyFilters(query, document.getElementById("sortSelect").value);
 });
+
+// 监听排序选项变化
+document.getElementById("sortSelect").addEventListener("change", function() {
+  const query = document.getElementById("searchInput").value.trim().toLowerCase();
+  applyFilters(query, this.value);
+});
+
+// 监听多选下载按钮点击
+document.getElementById("downloadSelected").addEventListener("click", function() {
+  const selectedLinks = document.querySelectorAll(".select-checkbox:checked + .download-link");
+  if (selectedLinks.length === 0) {
+    alert("请先选择要下载的文件。");
+    return;
+  }
+  
+  selectedLinks.forEach(link => {
+    // 创建一个临时的 <a> 元素用于触发下载
+    const a = document.createElement('a');
+    a.href = link.href;
+    a.download = link.download;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+});
+
+// 应用搜索和排序过滤
+function applyFilters(query, sortOption) {
+  let filteredData = [];
+
+  if (query === "") {
+    filteredData = originalData;
+  } else {
+    filteredData = filterTree(originalData, query);
+  }
+
+  if (sortOption) {
+    filteredData = sortTree(filteredData, sortOption);
+  }
+
+  currentData = filteredData;
+  renderFileTree(filteredData);
+}
 
 // 递归过滤树，根据查询关键词
 function filterTree(data, query) {
@@ -52,6 +92,35 @@ function filterTree(data, query) {
   return filtered;
 }
 
+// 递归排序树，根据排序选项
+function sortTree(data, sortOption) {
+  const [key, order] = sortOption.split('-');
+
+  const sortedData = [...data].sort((a, b) => {
+    let aKey = a[key];
+    let bKey = b[key];
+
+    // 如果排序键是 type，确保 directory 排在前面
+    if (key === "type") {
+      aKey = a.type === "directory" ? "a" : "b";
+      bKey = b.type === "directory" ? "a" : "b";
+    }
+
+    if (aKey < bKey) return order === "asc" ? -1 : 1;
+    if (aKey > bKey) return order === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  // 递归排序子节点
+  sortedData.forEach(item => {
+    if (item.type === "directory" && item.children && item.children.length > 0) {
+      item.children = sortTree(item.children, sortOption);
+    }
+  });
+
+  return sortedData;
+}
+
 // 渲染文件树
 function renderFileTree(data) {
   const fileTreeContainer = document.getElementById("file-tree");
@@ -71,7 +140,7 @@ function renderFileTree(data) {
 
   fileTreeContainer.appendChild(ul);
 
-  // 绑定折叠/展开事件
+  // 初始化所有文件夹的点击事件
   addToggleClickEvent();
 }
 
@@ -81,15 +150,24 @@ function createTreeItem(item) {
   li.classList.add(item.type === "directory" ? "folder-item" : "file-item");
 
   if (item.type === "directory") {
+    // 多选框（隐藏，仅用于下载）
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "select-checkbox";
+    checkbox.style.display = "none"; // 隐藏复选框，可以根据需求显示
+    li.appendChild(checkbox);
+
     // 折叠/展开按钮
     const toggleSpan = document.createElement("span");
     toggleSpan.className = "toggle-btn";
+    // 使用 Font Awesome 的 chevron-right 图标
+    toggleSpan.innerHTML = '<i class="fas fa-chevron-right"></i>';
     li.appendChild(toggleSpan);
 
     // 文件夹名称
     const nameSpan = document.createElement("span");
     nameSpan.className = "folder-icon";
-    nameSpan.textContent = highlightText(item.name);
+    nameSpan.innerHTML = highlightText(item.name);
     li.appendChild(nameSpan);
 
     // 递归创建子节点
@@ -102,11 +180,50 @@ function createTreeItem(item) {
       });
       li.appendChild(subUl);
     }
+
   } else {
+    // 多选框
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "select-checkbox";
+    li.appendChild(checkbox);
+
     // 文件名称
     const nameSpan = document.createElement("span");
     nameSpan.className = "file-icon";
-    nameSpan.textContent = highlightText(item.name);
+    
+    // 根据文件扩展名设置不同图标
+    const fileExtension = getFileExtension(item.name).toLowerCase();
+    let iconClass = "fas fa-file"; // 默认图标
+
+    switch(fileExtension) {
+      case "pdf":
+        iconClass = "fas fa-file-pdf";
+        break;
+      case "docx":
+      case "doc":
+        iconClass = "fas fa-file-word";
+        break;
+      case "pptx":
+      case "ppt":
+        iconClass = "fas fa-file-powerpoint";
+        break;
+      case "xlsx":
+      case "xls":
+        iconClass = "fas fa-file-excel";
+        break;
+      case "png":
+      case "jpg":
+      case "jpeg":
+      case "gif":
+        iconClass = "fas fa-file-image";
+        break;
+      // 添加更多文件类型图标
+      default:
+        iconClass = "fas fa-file";
+    }
+
+    nameSpan.innerHTML = `<i class="${iconClass}"></i> ${highlightText(item.name)}`;
     li.appendChild(nameSpan);
 
     // 下载链接
@@ -121,6 +238,11 @@ function createTreeItem(item) {
   }
 
   return li;
+}
+
+// 获取文件扩展名
+function getFileExtension(filename) {
+  return filename.split('.').pop();
 }
 
 // 绑定折叠/展开事件
@@ -141,10 +263,19 @@ function addToggleClickEvent() {
 // 高亮搜索关键词
 function highlightText(text) {
   const searchQuery = document.getElementById("searchInput").value.trim();
-  if (searchQuery === "") return text;
+  if (searchQuery === "") return escapeHTML(text);
 
   const regex = new RegExp(`(${escapeRegExp(searchQuery)})`, 'gi');
-  return text.replace(regex, '<span class="highlight">$1</span>');
+  return escapeHTML(text).replace(regex, '<span class="highlight">$1</span>');
+}
+
+// 转义HTML特殊字符
+function escapeHTML(str) {
+  return str.replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
 }
 
 // 转义正则表达式中的特殊字符

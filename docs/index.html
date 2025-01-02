@@ -2,103 +2,48 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>文件下载界面（含搜索功能）</title>
+  <title>文件下载界面（含搜索与排序功能）</title>
 
-  <!-- 简单的内联CSS，用于美化 -->
-  <style>
-    body {
-      font-family: "Microsoft YaHei", sans-serif;
-      background: #f5f5f5;
-      margin: 0; padding: 0;
-    }
-    .container {
-      width: 90%;
-      max-width: 960px;
-      margin: 30px auto;
-      background: #fff;
-      border-radius: 5px;
-      padding: 20px;
-      box-shadow: 0 0 10px #ccc;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+  <!-- 引用外部CSS文件 -->
+  <link rel="stylesheet" href="style.css">
 
-    /* 搜索框样式 */
-    .search-box {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    .search-box input {
-      width: 280px;
-      height: 32px;
-      font-size: 14px;
-      padding: 0 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      outline: none;
-    }
-
-    /* 列表与折叠样式 */
-    ul {
-      list-style: none;
-      padding-left: 20px;
-    }
-    li {
-      margin: 5px 0;
-      cursor: pointer;
-    }
-    .folder-icon::before {
-      content: "📁 ";
-    }
-    .file-icon::before {
-      content: "📄 ";
-    }
-    .download-link {
-      margin-left: 10px;
-      color: #3273dc;
-      text-decoration: underline;
-      font-size: 0.9em;
-    }
-    .download-link:hover {
-      color: #0056b3;
-    }
-
-    /* 折叠/展开图标 */
-    .toggle-btn {
-      display: inline-block;
-      width: 16px;
-      text-align: center;
-      margin-right: 5px;
-    }
-    .toggle-btn:before {
-      content: "▶";
-    }
-    .open .toggle-btn:before {
-      content: "▼";
-    }
-
-    /* 子节点默认隐藏 */
-    .nested {
-      display: none;
-      margin-left: 20px;
-    }
-    /* open 时显示 */
-    .open > .nested {
-      display: block;
-    }
-  </style>
+  <!-- 引入 Font Awesome 图标库 -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-pVnNIX+V9tV5evM6KCwLeHEOFE6cM9R3FJQzP0xXhAQqJRZJp6C9oNnSVB+V8YBuI1k1QY6Lhe7w4qC1nghZQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
 </head>
 <body>
   <div class="container">
     <h1>文件下载界面</h1>
 
-    <!-- 搜索框 -->
-    <div class="search-box">
-      <input type="text" id="searchInput" placeholder="搜索文件或文件夹...">
+    <!-- 搜索框和排序选项 -->
+    <div class="controls">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="搜索文件或文件夹...">
+      </div>
+      <div class="sort-box">
+        <label for="sortSelect">排序：</label>
+        <select id="sortSelect">
+          <option value="name-asc">名称 A-Z</option>
+          <option value="name-desc">名称 Z-A</option>
+          <option value="type-asc">类型 A-Z</option>
+          <option value="type-desc">类型 Z-A</option>
+        </select>
+      </div>
+      <div class="batch-download">
+        <button id="downloadSelected">下载选中文件</button>
+      </div>
     </div>
 
     <!-- 文件树容器 -->
-    <div id
+    <div id="file-tree"></div>
+  </div>
+
+  <!-- 引用外部JavaScript文件 -->
+  <script src="script.js"></script>
+</body>
+</html>

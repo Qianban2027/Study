@@ -8,7 +8,6 @@ body {
   padding: 0;
 }
 
-/* 页面容器 */
 .container {
   width: 90%;
   max-width: 960px;
@@ -19,31 +18,62 @@ body {
   box-shadow: 0 0 10px #ccc;
 }
 
-/* 标题样式 */
 h1 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-/* 搜索框样式 */
-.search-box {
+/* 控制区样式 */
+.controls {
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
+.search-box,
+.sort-box,
+.batch-download {
+  margin: 5px 0;
+}
+
 .search-box input {
-  width: 280px;
+  width: 200px;
   height: 32px;
   font-size: 14px;
   padding: 0 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   outline: none;
+  transition: border-color 0.3s;
 }
 
 .search-box input:focus {
   border-color: #3273dc;
+}
+
+.sort-box select {
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.batch-download button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #3273dc;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.batch-download button:hover {
+  background-color: #255aaf;
 }
 
 /* 列表与折叠样式 */
@@ -55,20 +85,25 @@ ul {
 li {
   margin: 5px 0;
   cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 /* 文件夹、文件的图标 */
-.folder-icon::before {
-  content: "📁 ";
+.folder-icon {
+  margin-right: 5px;
+  color: #f0ad4e;
 }
 
-.file-icon::before {
-  content: "📄 ";
+.file-icon {
+  margin-right: 5px;
+  color: #5bc0de;
 }
 
 /* 下载链接的样式 */
 .download-link {
-  margin-left: 10px;
+  margin-left: auto;
   color: #3273dc;
   text-decoration: underline;
   font-size: 0.9em;
@@ -80,24 +115,25 @@ li {
 
 /* 折叠/展开图标 */
 .toggle-btn {
-  display: inline-block;
-  width: 16px;
-  text-align: center;
   margin-right: 5px;
+  color: #777;
+  transition: transform 0.3s;
 }
 
-.toggle-btn:before {
-  content: "▶";
+.toggle-btn i {
+  pointer-events: none; /* 让图标不响应点击事件，只响应父元素 */
 }
 
-.open .toggle-btn:before {
-  content: "▼";
+.open > .toggle-btn i {
+  transform: rotate(90deg);
 }
 
 /* 子节点默认隐藏 */
 .nested {
   display: none;
   margin-left: 20px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
 }
 
 /* open 时显示 */
@@ -108,4 +144,34 @@ li {
 /* 高亮搜索结果 */
 .highlight {
   background-color: yellow;
+}
+
+/* 多选框样式 */
+.select-checkbox {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  .sort-box {
+    width: 100%;
+  }
+
+  .batch-download {
+    width: 100%;
+  }
+
+  .download-link {
+    font-size: 0.8em;
+  }
 }
