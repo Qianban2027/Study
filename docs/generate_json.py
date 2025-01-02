@@ -5,8 +5,8 @@ def generate_file_tree(base_path, relative_path=""):
     items = []
     full_path = os.path.join(base_path, relative_path)
     for item in sorted(os.listdir(full_path)):
-        # 跳过指定文件
-        if item in ["git_sync.sh", "git_sync.bat", "LICENSE"]:
+        # 跳过指定文件和 docs 文件夹
+        if item in ["git_sync.sh", "git_sync.bat", "LICENSE", "docs"]:
             continue
         item_path = os.path.join(full_path, item)
         if os.path.isdir(item_path):
