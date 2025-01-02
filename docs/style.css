@@ -1,5 +1,6 @@
 /* style.css */
 
+/* 基础样式 */
 body {
   font-family: "Microsoft YaHei", sans-serif;
   background: #f5f5f5;
@@ -18,12 +19,34 @@ body {
   box-shadow: 0 0 10px #ccc;
 }
 
+/* 标题样式 */
 h1 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-/* 去掉默认列表样式，稍作缩进 */
+/* 搜索框样式 */
+.search-box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.search-box input {
+  width: 280px;
+  height: 32px;
+  font-size: 14px;
+  padding: 0 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.search-box input:focus {
+  border-color: #3273dc;
+}
+
+/* 列表与折叠样式 */
 ul {
   list-style: none;
   padding-left: 20px;
@@ -38,6 +61,7 @@ li {
 .folder-icon::before {
   content: "📁 ";
 }
+
 .file-icon::before {
   content: "📄 ";
 }
@@ -49,6 +73,7 @@ li {
   text-decoration: underline;
   font-size: 0.9em;
 }
+
 .download-link:hover {
   color: #0056b3;
 }
@@ -60,19 +85,27 @@ li {
   text-align: center;
   margin-right: 5px;
 }
+
 .toggle-btn:before {
   content: "▶";
 }
+
 .open .toggle-btn:before {
   content: "▼";
 }
 
-/* 默认子元素隐藏 */
+/* 子节点默认隐藏 */
 .nested {
   display: none;
   margin-left: 20px;
 }
-/* .open 时显示 */
+
+/* open 时显示 */
 .open > .nested {
   display: block;
+}
+
+/* 高亮搜索结果 */
+.highlight {
+  background-color: yellow;
 }

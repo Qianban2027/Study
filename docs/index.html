@@ -2,107 +2,103 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8" />
-  <title>文件下载界面</title>
+  <title>文件下载界面（含搜索功能）</title>
 
-  <!-- 引用外部CSS文件 -->
-  <link rel="stylesheet" href="style.css">
+  <!-- 简单的内联CSS，用于美化 -->
+  <style>
+    body {
+      font-family: "Microsoft YaHei", sans-serif;
+      background: #f5f5f5;
+      margin: 0; padding: 0;
+    }
+    .container {
+      width: 90%;
+      max-width: 960px;
+      margin: 30px auto;
+      background: #fff;
+      border-radius: 5px;
+      padding: 20px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* 搜索框样式 */
+    .search-box {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .search-box input {
+      width: 280px;
+      height: 32px;
+      font-size: 14px;
+      padding: 0 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    /* 列表与折叠样式 */
+    ul {
+      list-style: none;
+      padding-left: 20px;
+    }
+    li {
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    .folder-icon::before {
+      content: "📁 ";
+    }
+    .file-icon::before {
+      content: "📄 ";
+    }
+    .download-link {
+      margin-left: 10px;
+      color: #3273dc;
+      text-decoration: underline;
+      font-size: 0.9em;
+    }
+    .download-link:hover {
+      color: #0056b3;
+    }
+
+    /* 折叠/展开图标 */
+    .toggle-btn {
+      display: inline-block;
+      width: 16px;
+      text-align: center;
+      margin-right: 5px;
+    }
+    .toggle-btn:before {
+      content: "▶";
+    }
+    .open .toggle-btn:before {
+      content: "▼";
+    }
+
+    /* 子节点默认隐藏 */
+    .nested {
+      display: none;
+      margin-left: 20px;
+    }
+    /* open 时显示 */
+    .open > .nested {
+      display: block;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>文件下载界面</h1>
-    <div id="file-tree"></div>
-  </div>
 
-  <script>
-    // Raw文件前缀，根据你自己的仓库名、分支名进行调整
-    const GITHUB_RAW_PREFIX = "https://raw.githubusercontent.com/Qianban2027/Study/main/";
+    <!-- 搜索框 -->
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="搜索文件或文件夹...">
+    </div>
 
-    // 读取 /docs/files.json 文件
-    fetch("files.json")
-      .then((response) => response.json())
-      .then((data) => {
-        const fileTreeContainer = document.getElementById("file-tree");
-        const ul = document.createElement("ul");
-
-        // 递归生成树
-        data.forEach(item => {
-          const li = createTreeItem(item);
-          ul.appendChild(li);
-        });
-        fileTreeContainer.appendChild(ul);
-
-        // 初始化所有文件夹的点击事件
-        addToggleClickEvent();
-      })
-      .catch((err) => {
-        console.error("加载 JSON 文件出现错误:", err);
-      });
-
-    // 创建树节点（文件夹/文件）
-    function createTreeItem(item) {
-      const li = document.createElement("li");
-      li.classList.add(item.type === "directory" ? "folder-item" : "file-item");
-
-      // 如果是文件夹
-      if (item.type === "directory") {
-        // 小图标（▶/▼）
-        const toggleSpan = document.createElement("span");
-        toggleSpan.className = "toggle-btn";
-        li.appendChild(toggleSpan);
-
-        // 文件夹名
-        const nameSpan = document.createElement("span");
-        nameSpan.className = "folder-icon";
-        nameSpan.textContent = item.name;
-        li.appendChild(nameSpan);
-
-        // 递归子节点
-        if (item.children && item.children.length > 0) {
-          const subUl = document.createElement("ul");
-          subUl.className = "nested";
-          item.children.forEach(child => {
-            const childLi = createTreeItem(child);
-            subUl.appendChild(childLi);
-          });
-          li.appendChild(subUl);
-        }
-
-      } else {
-        // 如果是文件
-        const nameSpan = document.createElement("span");
-        nameSpan.className = "file-icon";
-        nameSpan.textContent = item.name;
-        li.appendChild(nameSpan);
-
-        // 添加下载链接
-        const link = document.createElement("a");
-        link.className = "download-link";
-        link.textContent = "[下载]";
-        // 这里使用原始文件地址: GITHUB_RAW_PREFIX + path
-        // 如果 item.path 以 / 开头，可去掉前导斜线
-        let pathWithoutSlash = item.path.replace(/^\/+/, '');
-        link.href = GITHUB_RAW_PREFIX + pathWithoutSlash;
-        // link.target = "_blank"; // 若希望在新窗口打开，则取消注释
-        li.appendChild(link);
-      }
-
-      return li;
-    }
-
-    // 给文件夹 li 添加点击事件，实现展开/折叠
-    function addToggleClickEvent() {
-      const folderItems = document.querySelectorAll("li.folder-item");
-      folderItems.forEach(folder => {
-        folder.addEventListener("click", function(e) {
-          // 如果点击的是A链接，则不做展开折叠
-          if (e.target.tagName.toLowerCase() === 'a') return;
-
-          // 切换open类
-          this.classList.toggle("open");
-          e.stopPropagation();
-        });
-      });
-    }
-  </script>
-</body>
-</html>
+    <!-- 文件树容器 -->
+    <div id
