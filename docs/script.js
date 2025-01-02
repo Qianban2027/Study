@@ -45,6 +45,7 @@ document.getElementById("downloadSelected").addEventListener("click", function()
     const a = document.createElement('a');
     a.href = link.href;
     a.download = link.download;
+    a.style.display = 'none';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -150,13 +151,6 @@ function createTreeItem(item) {
   li.classList.add(item.type === "directory" ? "folder-item" : "file-item");
 
   if (item.type === "directory") {
-    // 多选框（隐藏，仅用于下载）
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.className = "select-checkbox";
-    checkbox.style.display = "none"; // 隐藏复选框，可以根据需求显示
-    li.appendChild(checkbox);
-
     // 折叠/展开按钮
     const toggleSpan = document.createElement("span");
     toggleSpan.className = "toggle-btn";
@@ -168,6 +162,7 @@ function createTreeItem(item) {
     const nameSpan = document.createElement("span");
     nameSpan.className = "folder-icon";
     nameSpan.innerHTML = highlightText(item.name);
+    nameSpan.title = item.name; // 添加工具提示
     li.appendChild(nameSpan);
 
     // 递归创建子节点
@@ -186,44 +181,17 @@ function createTreeItem(item) {
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.className = "select-checkbox";
+    // 阻止点击复选框时触发父级事件
+    checkbox.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
     li.appendChild(checkbox);
 
     // 文件名称
     const nameSpan = document.createElement("span");
     nameSpan.className = "file-icon";
-    
-    // 根据文件扩展名设置不同图标
-    const fileExtension = getFileExtension(item.name).toLowerCase();
-    let iconClass = "fas fa-file"; // 默认图标
-
-    switch(fileExtension) {
-      case "pdf":
-        iconClass = "fas fa-file-pdf";
-        break;
-      case "docx":
-      case "doc":
-        iconClass = "fas fa-file-word";
-        break;
-      case "pptx":
-      case "ppt":
-        iconClass = "fas fa-file-powerpoint";
-        break;
-      case "xlsx":
-      case "xls":
-        iconClass = "fas fa-file-excel";
-        break;
-      case "png":
-      case "jpg":
-      case "jpeg":
-      case "gif":
-        iconClass = "fas fa-file-image";
-        break;
-      // 添加更多文件类型图标
-      default:
-        iconClass = "fas fa-file";
-    }
-
-    nameSpan.innerHTML = `<i class="${iconClass}"></i> ${highlightText(item.name)}`;
+    nameSpan.innerHTML = highlightText(item.name);
+    nameSpan.title = item.name; // 添加工具提示
     li.appendChild(nameSpan);
 
     // 下载链接
@@ -251,9 +219,6 @@ function addToggleClickEvent() {
 
   folderItems.forEach(folder => {
     folder.addEventListener("click", function(e) {
-      // 防止事件冒泡到父级
-      e.stopPropagation();
-
       // 切换 open 类
       this.classList.toggle("open");
     });
