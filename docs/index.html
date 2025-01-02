@@ -1,53 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>File Viewer</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    .folder { margin-left: 20px; }
-    .file { margin-left: 40px; }
-    a { text-decoration: none; color: #007BFF; }
-    a:hover { text-decoration: underline; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Viewer</title>
 </head>
 <body>
-  <h1>File Viewer</h1>
-  <p>Click on a file to view or download it.</p>
-  <div id="fileContainer"></div>
+    <h1>File Viewer</h1>
+    <p>Click on a file to view or download it.</p>
+    <div id="file-viewer"></div>
+    <footer>
+        <p>Licensed under the <a href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
+    </footer>
+    <script>
+        async function loadFiles() {
+            const response = await fetch('files.json');
+            const data = await response.json();
+            const fileViewer = document.getElementById('file-viewer');
 
-  <script>
-    // 动态加载 JSON 文件
-    fetch('files.json')
-      .then(response => response.json())
-      .then(data => {
-        const container = document.getElementById('fileContainer');
-
-        function renderFiles(files, parentElement) {
-          files.forEach(file => {
-            if (file.type === "folder") {
-              const folderDiv = document.createElement('div');
-              folderDiv.className = 'folder';
-              folderDiv.textContent = `📂 ${file.name}`;
-              parentElement.appendChild(folderDiv);
-              renderFiles(file.children, folderDiv);
-            } else if (file.type === "file") {
-              const fileDiv = document.createElement('div');
-              fileDiv.className = 'file';
-              const link = document.createElement('a');
-              link.href = file.path;
-              link.textContent = `📄 ${file.name}`;
-              link.target = '_blank';
-              fileDiv.appendChild(link);
-              parentElement.appendChild(fileDiv);
+            function renderFiles(files, container) {
+                const ul = document.createElement('ul');
+                files.forEach(file => {
+                    const li = document.createElement('li');
+                    if (file.type === 'directory') {
+                        li.textContent = file.name;
+                        const nested = document.createElement('div');
+                        renderFiles(file.children, nested);
+                        li.appendChild(nested);
+                    } else {
+                        const link = document.createElement('a');
+                        link.textContent = file.name;
+                        link.href = file.path;
+                        link.target = "_blank";
+                        li.appendChild(link);
+                    }
+                    ul.appendChild(li);
+                });
+                container.appendChild(ul);
             }
-          });
+
+            renderFiles(data.files, fileViewer);
         }
 
-        renderFiles(data, container);
-      })
-      .catch(error => console.error('Error loading files.json:', error));
-  </script>
+        loadFiles();
+    </script>
 </body>
 </html>
