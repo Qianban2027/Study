@@ -1,21 +1,49 @@
+/* 全局样式 */
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+  font-family: Arial, sans-serif;
+  margin: 20px;
 }
+
+h1 {
+  margin-bottom: 1rem;
+}
+
 #loader {
-    font-size: 18px;
-    font-weight: bold;
-    color: #555;
+  font-size: 18px;
+  font-weight: bold;
+  color: #555;
 }
+
+/* 默认隐藏树，等加载完成后显示 */
+#file-tree {
+  display: none;
+}
+
+/* 列表样式 */
 ul {
-    list-style: none;
-    padding-left: 20px;
+  list-style-type: none;
+  padding-left: 20px;
 }
+
+li {
+  margin: 4px 0;
+}
+
+/* 目录样式 */
 .directory {
-    font-weight: bold;
-    cursor: pointer;
-    color: #2a9df4;
+  font-weight: bold;
+  color: #2a9df4;
+  cursor: pointer;
 }
+
+/* 文件样式 */
 .file {
-    color: #333;
+  color: #333;
+}
+
+/* 缩进：在递归层级间做一些可视化区分 */
+ul ul {
+  margin-left: 15px;
+  border-left: 1px dashed #ccc;
+  padding-left: 10px;
 }
