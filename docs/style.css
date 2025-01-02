@@ -1,0 +1,78 @@
+/* style.css */
+
+body {
+  font-family: "Microsoft YaHei", sans-serif;
+  background: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* 页面容器 */
+.container {
+  width: 90%;
+  max-width: 960px;
+  margin: 30px auto;
+  background: #fff;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 0 10px #ccc;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* 去掉默认列表样式，稍作缩进 */
+ul {
+  list-style: none;
+  padding-left: 20px;
+}
+
+li {
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+/* 文件夹、文件的图标 */
+.folder-icon::before {
+  content: "📁 ";
+}
+.file-icon::before {
+  content: "📄 ";
+}
+
+/* 下载链接的样式 */
+.download-link {
+  margin-left: 10px;
+  color: #3273dc;
+  text-decoration: underline;
+  font-size: 0.9em;
+}
+.download-link:hover {
+  color: #0056b3;
+}
+
+/* 折叠/展开图标 */
+.toggle-btn {
+  display: inline-block;
+  width: 16px;
+  text-align: center;
+  margin-right: 5px;
+}
+.toggle-btn:before {
+  content: "▶";
+}
+.open .toggle-btn:before {
+  content: "▼";
+}
+
+/* 默认子元素隐藏 */
+.nested {
+  display: none;
+  margin-left: 20px;
+}
+/* .open 时显示 */
+.open > .nested {
+  display: block;
+}
