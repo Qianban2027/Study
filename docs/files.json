@@ -2026,6 +2026,11 @@
     "path": "LICENSE"
   },
   {
+    "name": ".gitignore",
+    "type": "file",
+    "path": ".gitignore"
+  },
+  {
     "name": "git_sync.bat",
     "type": "file",
     "path": "git_sync.bat"
