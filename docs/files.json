@@ -2259,19 +2259,19 @@
                         "path": ".git/objects/pack",
                         "children": [
                             {
-                                "name": "pack-c6518f5b80c1a7ee1f3c5c9681c642cb1767ff26.pack",
+                                "name": "pack-54e876f2c0f5b1fc21b8cd2a09334b4916e6e875.idx",
                                 "type": "file",
-                                "path": ".git/objects/pack/pack-c6518f5b80c1a7ee1f3c5c9681c642cb1767ff26.pack"
+                                "path": ".git/objects/pack/pack-54e876f2c0f5b1fc21b8cd2a09334b4916e6e875.idx"
                             },
                             {
-                                "name": "pack-c6518f5b80c1a7ee1f3c5c9681c642cb1767ff26.idx",
+                                "name": "pack-54e876f2c0f5b1fc21b8cd2a09334b4916e6e875.rev",
                                 "type": "file",
-                                "path": ".git/objects/pack/pack-c6518f5b80c1a7ee1f3c5c9681c642cb1767ff26.idx"
+                                "path": ".git/objects/pack/pack-54e876f2c0f5b1fc21b8cd2a09334b4916e6e875.rev"
                             },
                             {
-                                "name": "pack-c6518f5b80c1a7ee1f3c5c9681c642cb1767ff26.rev",
+                                "name": "pack-54e876f2c0f5b1fc21b8cd2a09334b4916e6e875.pack",
                                 "type": "file",
-                                "path": ".git/objects/pack/pack-c6518f5b80c1a7ee1f3c5c9681c642cb1767ff26.rev"
+                                "path": ".git/objects/pack/pack-54e876f2c0f5b1fc21b8cd2a09334b4916e6e875.pack"
                             }
                         ]
                     }
