@@ -45,6 +45,7 @@
     <ul class="file-tree" id="file-tree"></ul>
 
     <script>
+        // 模拟项目文件数据结构
         const fileData = {
             "files": [
                 {
@@ -63,11 +64,6 @@
                             "path": "src/styles.css"
                         }
                     ]
-                },
-                {
-                    "name": "README.md",
-                    "type": "file",
-                    "path": "README.md"
                 },
                 {
                     "name": "docs",
@@ -96,4 +92,28 @@
                     li.addEventListener("click", function () {
                         ul.classList.toggle("hidden");
                     });
-                    parentElement
+                    parentElement.appendChild(li);
+                    li.appendChild(ul);
+                    renderTree(item.children, ul);
+                } else if (item.type === "file") {
+                    li.classList.add("file");
+                    parentElement.appendChild(li);
+                }
+            });
+        }
+
+        const fileTreeElement = document.getElementById("file-tree");
+        renderTree(fileData.files, fileTreeElement);
+
+        // 切换视图样式
+        document.getElementById("view-style").addEventListener("change", function (event) {
+            const style = event.target.value;
+            if (style === "compact") {
+                document.querySelectorAll(".file-tree").forEach(tree => tree.classList.add("hidden"));
+            } else if (style === "expanded") {
+                document.querySelectorAll(".file-tree").forEach(tree => tree.classList.remove("hidden"));
+            }
+        });
+    </script>
+</body>
+</html>
