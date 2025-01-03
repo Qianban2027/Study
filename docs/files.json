@@ -2132,6 +2132,11 @@
     ]
   },
   {
+    "name": ".gitdontignore",
+    "type": "file",
+    "path": ".gitdontignore"
+  },
+  {
     "name": "03英语",
     "type": "directory",
     "path": "03英语",
